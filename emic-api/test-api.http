@@ -1,0 +1,27 @@
+### Testing the API with REST Client extension in VS Code
+
+### TEST 1: Successful Creation of a New Release (201 Created)
+
+POST http://localhost:7071/api/createrelease
+Content-Type: application/json
+
+{
+    "title": "Tenet", 
+    "director": "Christopher Nolan", 
+    "genre": "Action", 
+    "studio": "Warner Bros. Pictures", 
+    "releaseDate": "2020-08-26"
+}
+
+### TEST 2: Creation Failure - Missing Field (400 Bad Request)
+
+POST http://localhost:7071/api/createrelease
+Content-Type: application/json
+
+{
+    "title": "Ghostbusters: Afterlife", 
+    "director": "Jason Reitman", 
+    "genre": "Comedy", 
+    "studio": "Sony Pictures"
+    // **releaseDate is intentionally missing here**
+}

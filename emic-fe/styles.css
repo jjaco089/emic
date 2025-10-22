@@ -1,0 +1,148 @@
+/* Accessibility: Visually hides an element but keeps it readable for screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* --- Global Styles --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ebee; /* Light background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    margin: 0;
+}
+
+h1 {
+    color: #1c1e21;
+    text-align: center;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+    width: 100%;
+    max-width: 600px;
+    margin: 15px 0;
+}
+
+/* --- Container and Layout --- */
+#appContainer {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 10px;
+}
+
+#listView, #formView {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide views by default for JS control */
+.view-container {
+    display: none;
+}
+#listView {
+    /* Always visible on load before JS runs */
+    display: block; 
+}
+
+
+/* --- List Header and Filter --- */
+#listHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+#year-selector {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+/* --- Twitter Feed Style List --- */
+#releasesList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.release-item {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #f7f7f7;
+}
+
+.release-item strong {
+    font-size: 1.2em;
+    color: #1877f2;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.release-item p {
+    margin: 4px 0;
+    font-size: 0.9em;
+    color: #606770;
+}
+
+/* --- Form Styles --- */
+label {
+    font-weight: 600;
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    color: #1c1e21;
+}
+
+input[type="text"], input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+button[type="submit"] {
+    background-color: #42b72a;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+button[type="submit"]:hover {
+    background-color: #36a420;
+}
+
+#messageArea {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+}
