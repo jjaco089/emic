@@ -2,7 +2,7 @@
 const API_BASE_URL = '/api/';
 
 // --- Configuration ---
-const ADMIN_SECRET = 'emicadmin2025'; // Secret key for form access
+// REMOVED: ADMIN_SECRET is no longer needed.
 const CURRENT_YEAR_CONTEXT = 2025; // Define the current year for project context
 
 // --- Filtering & State Variables ---
@@ -13,39 +13,31 @@ const views = {
     'form': document.getElementById('formView')
 };
 
-// --- A. Navigation & Security Logic ---
+// --- A. Navigation & View Logic ---
 
 /**
  * Manages the single-page view visibility.
- * Checks for the secret key if navigating to the 'form' view.
+ * No security checks needed here; API handles auth.
  * @param {string} viewName - 'list' or 'form'
  */
 function navigateTo(viewName) {
-    const urlParams = new URLSearchParams(window.location.search);
-    let targetViewName = viewName;
-    
-    // Security Check: Only allow 'form' access if secret is in the URL
-    if (viewName === 'form' && urlParams.get('admin') !== ADMIN_SECRET) {
-        alert('Access Denied: You must use the secret URL to access the data entry form.');
-        targetViewName = 'list'; // Fallback to list view
-        // Clean the URL if the secret key was invalid
-        if (window.location.search) {
-             window.history.pushState({}, '', window.location.pathname);
-        }
+    // Clean the URL of any old parameters for a clean look
+    if (window.location.search) {
+        window.history.pushState({}, '', window.location.pathname);
     }
-
+    
     // Hide all views and show the target view
     for (const key in views) {
         views[key].style.display = 'none';
     }
 
-    const targetView = views[targetViewName];
+    const targetView = views[viewName];
     if (targetView) {
         targetView.style.display = 'block';
     }
 
     // Refresh data only when navigating to the list
-    if (targetViewName === 'list') {
+    if (viewName === 'list') {
         fetchAndDisplayReleases(selectedYear);
     }
 }
@@ -56,7 +48,7 @@ function navigateTo(viewName) {
 /** Populates the year dropdown selector. */
 function populateYearSelector() {
     const selector = document.getElementById('year-selector');
-    const startYear = 2025; // As requested, start year is 2025
+    const startYear = 2025; 
     const endYear = CURRENT_YEAR_CONTEXT + 1; 
 
     for (let year = endYear; year >= startYear; year--) {
@@ -66,7 +58,6 @@ function populateYearSelector() {
         selector.appendChild(option);
     }
     
-    // Set the default selection to the CURRENT_YEAR_CONTEXT
     selector.value = CURRENT_YEAR_CONTEXT; 
     document.getElementById('currentYearDisplay').textContent = CURRENT_YEAR_CONTEXT;
 }
@@ -89,7 +80,7 @@ async function fetchAndDisplayReleases(year) {
     const listContainer = document.getElementById('releasesList');
     listContainer.innerHTML = `<li style="text-align: center; color: gray;">Fetching data for ${year}...</li>`;
     
-    const endpoint = `${API_BASE_URL}/getreleases?year=${year}`;
+    const endpoint = `${API_BASE_URL}getreleases?year=${year}`;
 
     try {
         const response = await fetch(endpoint);
@@ -135,6 +126,16 @@ async function fetchAndDisplayReleases(year) {
 async function handleFormSubmit(event) {
     event.preventDefault(); 
     
+    // --- NEW: Authentication Prompts ---
+    const username = prompt("Enter Admin Username:");
+    const password = prompt("Enter Admin Password:");
+    
+    if (!username || !password) {
+        alert("Submission cancelled. Credentials are required.");
+        return;
+    }
+    // -----------------------------------
+    
     // Gather data from the form fields
     const newRelease = {
         title: document.getElementById('titleInput').value,
@@ -149,10 +150,14 @@ async function handleFormSubmit(event) {
     messageArea.style.color = 'black';
 
     try {
-        const response = await fetch(`${API_BASE_URL}/createrelease`, {
+        const response = await fetch(`${API_BASE_URL}createrelease`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                // --- NEW: Inject Credentials into Headers ---
+                'X-Admin-Username': username, 
+                'X-Admin-Password': password  
+                // ------------------------------------------
             },
             body: JSON.stringify(newRelease)
         });
@@ -160,18 +165,22 @@ async function handleFormSubmit(event) {
         const result = await response.json();
 
         if (response.ok) {
-            // SUCCESS
+            // SUCCESS (Status 201)
             messageArea.textContent = `SUCCESS! Release "${result.title}" added.`;
             messageArea.style.color = 'green';
             event.target.reset(); // Clear the form
             
-            // Switch to the list view for the year the movie was submitted for
             const submittedYear = newRelease.releaseDate.substring(0, 4);
             document.getElementById('year-selector').value = submittedYear;
             selectedYear = submittedYear;
             navigateTo('list'); 
-        } else {
-            // FAILURE
+        } else if (response.status === 401) {
+             // 401 UNAUTHORIZED from the API
+            messageArea.textContent = `AUTHENTICATION ERROR: ${result.body || response.statusText}`;
+            messageArea.style.color = 'red';
+        } 
+        else {
+            // Other failures (400, 500)
             messageArea.textContent = `ERROR: ${result.body || response.statusText}`;
             messageArea.style.color = 'red';
         }
@@ -190,18 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Set up initial data and view state
     populateYearSelector();
     
-    // 2. Add event listeners to elements (instead of inline in HTML)
+    // 2. Add event listeners to elements
     document.getElementById('year-selector').addEventListener('change', handleYearChange);
     document.getElementById('releaseForm').addEventListener('submit', handleFormSubmit);
 
-    // 3. Determine initial view based on URL search parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (urlParams.get('admin') === ADMIN_SECRET) {
-        // If the secret key is present, navigate to the form
-        navigateTo('form'); 
-    } else {
-        // Otherwise, default to the main list view
-        navigateTo('list');
-    }
+    // 3. Determine initial view (no more URL checks)
+    navigateTo('list'); // Always start on the list view
 });
