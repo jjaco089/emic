@@ -11,6 +11,11 @@
     <h1>EMIC - release dates</h1>
     <hr>
     
+    <div id="nav-controls">
+        <a href="#" onclick="navigateTo('list'); return false;">View Releases</a> 
+        | 
+        <a href="#" onclick="navigateTo('form'); return false;">Enter New Data</a>
+    </div>
     <div id="appContainer">
 
         <div id="listView" class="view-container">
@@ -48,6 +53,9 @@
                 <button type="submit">Add New Release</button>
                 <p id="messageArea"></p>
             </form>
+            
+            <button type="button" onclick="navigateTo('list')">Cancel / Back to List</button>
+
         </div>
     </div>
 
