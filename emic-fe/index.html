@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>EMIC release dates MVP</title>
+    <title>EMIC Release Date Tracker (MVP)</title>
     <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
 
-    <h1>EMIC - release dates</h1>
+    <header id="siteHeader">
+        <div id="logoContainer">
+            <span id="logoText">MAIN SITE LOGO / BRAND</span>
+        </div>
+        
+        <h1>EMIC - Release Date Tracker</h1>
+    </header>
     <hr>
     
-    <div id="nav-controls">
-        <a href="#" onclick="navigateTo('list'); return false;">View Releases</a> 
-        | 
-        <a href="#" onclick="navigateTo('form'); return false;">Enter New Data</a>
-    </div>
     <div id="appContainer">
 
         <div id="listView" class="view-container">
@@ -23,41 +24,18 @@
                 <h2>Releases for 
                     <span id="currentYearDisplay"></span>
                 </h2>
-                <label for="year-selector" class="sr-only">Select Year:</label>
-                <select id="year-selector"></select>
+                <span id="year-controls">
+                    <label for="year-selector" class="sr-only">Select Year:</label>
+                    <select id="year-selector"></select>
+                </span>
             </div>
             
             <ul id="releasesList">
                 <li>Loading releases...</li>
             </ul>
         </div>
-
-        <div id="formView" class="view-container">
-            <h2>Manual Data Entry Form</h2>
-            <form id="releaseForm">
-                <label for="titleInput">Title:</label>
-                <input type="text" id="titleInput" required>
-
-                <label for="directorInput">Director:</label>
-                <input type="text" id="directorInput" required>
-                
-                <label for="genreInput">Genre:</label>
-                <input type="text" id="genreInput" required>
-
-                <label for="studioInput">Studio:</label>
-                <input type="text" id="studioInput" required>
-
-                <label for="releaseDateInput">India Release Date (YYYY-MM-DD):</label>
-                <input type="date" id="releaseDateInput" required>
-
-                <button type="submit">Add New Release</button>
-                <p id="messageArea"></p>
-            </form>
-            
-            <button type="button" onclick="navigateTo('list')">Cancel / Back to List</button>
-
+        
         </div>
-    </div>
 
     <script src="app.js"></script>
 </body>

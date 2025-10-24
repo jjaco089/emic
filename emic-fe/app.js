@@ -2,44 +2,36 @@
 const API_BASE_URL = '/api/';
 
 // --- Configuration ---
-// REMOVED: ADMIN_SECRET is no longer needed.
 const CURRENT_YEAR_CONTEXT = 2025; // Define the current year for project context
 
 // --- Filtering & State Variables ---
 let selectedYear = CURRENT_YEAR_CONTEXT;
 
 const views = {
+    // Only the list view remains
     'list': document.getElementById('listView'),
-    'form': document.getElementById('formView')
 };
 
-// --- A. Navigation & View Logic ---
+// --- A. Navigation & View Logic (Simplified) ---
 
 /**
- * Manages the single-page view visibility.
- * No security checks needed here; API handles auth.
- * @param {string} viewName - 'list' or 'form'
+ * Ensures the list view is always visible and refreshed.
+ * NOTE: Since there is only one view, this mostly acts as a refresh trigger.
+ * @param {string} viewName - 'list' (always defaults to list)
  */
 function navigateTo(viewName) {
-    // Clean the URL of any old parameters for a clean look
-    if (window.location.search) {
-        window.history.pushState({}, '', window.location.pathname);
-    }
-    
-    // Hide all views and show the target view
+    // Hide all (in case we add more later) and show the list view
     for (const key in views) {
         views[key].style.display = 'none';
     }
 
-    const targetView = views[viewName];
+    const targetView = views['list'];
     if (targetView) {
         targetView.style.display = 'block';
     }
 
-    // Refresh data only when navigating to the list
-    if (viewName === 'list') {
-        fetchAndDisplayReleases(selectedYear);
-    }
+    // Always refresh data
+    fetchAndDisplayReleases(selectedYear);
 }
 
 
@@ -80,7 +72,7 @@ async function fetchAndDisplayReleases(year) {
     const listContainer = document.getElementById('releasesList');
     listContainer.innerHTML = `<li style="text-align: center; color: gray;">Fetching data for ${year}...</li>`;
     
-    const endpoint = `${API_BASE_URL}getreleases?year=${year}`;
+    const endpoint = `${API_BASE_URL}getreleases?year=${year}`; // Use updated endpoint without leading slash
 
     try {
         const response = await fetch(endpoint);
@@ -121,76 +113,8 @@ async function fetchAndDisplayReleases(year) {
 }
 
 
-// --- D. Function to Handle Form Submission (POST /api/createrelease) ---
-
-async function handleFormSubmit(event) {
-    event.preventDefault(); 
-    
-    // --- NEW: Authentication Prompts ---
-    const username = prompt("Enter Admin Username:");
-    const password = prompt("Enter Admin Password:");
-    
-    if (!username || !password) {
-        alert("Submission cancelled. Credentials are required.");
-        return;
-    }
-    // -----------------------------------
-    
-    // Gather data from the form fields
-    const newRelease = {
-        title: document.getElementById('titleInput').value,
-        director: document.getElementById('directorInput').value,
-        genre: document.getElementById('genreInput').value,
-        studio: document.getElementById('studioInput').value,
-        releaseDate: document.getElementById('releaseDateInput').value, 
-    };
-    
-    const messageArea = document.getElementById('messageArea');
-    messageArea.textContent = 'Submitting...';
-    messageArea.style.color = 'black';
-
-    try {
-        const response = await fetch(`${API_BASE_URL}createrelease`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // --- NEW: Inject Credentials into Headers ---
-                'X-Admin-Username': username, 
-                'X-Admin-Password': password  
-                // ------------------------------------------
-            },
-            body: JSON.stringify(newRelease)
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            // SUCCESS (Status 201)
-            messageArea.textContent = `SUCCESS! Release "${result.title}" added.`;
-            messageArea.style.color = 'green';
-            event.target.reset(); // Clear the form
-            
-            const submittedYear = newRelease.releaseDate.substring(0, 4);
-            document.getElementById('year-selector').value = submittedYear;
-            selectedYear = submittedYear;
-            navigateTo('list'); 
-        } else if (response.status === 401) {
-             // 401 UNAUTHORIZED from the API
-            messageArea.textContent = `AUTHENTICATION ERROR: ${result.body || response.statusText}`;
-            messageArea.style.color = 'red';
-        } 
-        else {
-            // Other failures (400, 500)
-            messageArea.textContent = `ERROR: ${result.body || response.statusText}`;
-            messageArea.style.color = 'red';
-        }
-
-    } catch (error) {
-        messageArea.textContent = 'Network Error during submission.';
-        messageArea.style.color = 'red';
-        console.error('Submission error:', error);
-    }
-}
+// --- D. Form Submission Function (REMOVED) ---
+// The handleFormSubmit function has been removed entirely.
 
 
 // --- E. Initialization ---
@@ -199,10 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Set up initial data and view state
     populateYearSelector();
     
-    // 2. Add event listeners to elements
+    // 2. Add event listeners (form submit listener removed)
     document.getElementById('year-selector').addEventListener('change', handleYearChange);
-    document.getElementById('releaseForm').addEventListener('submit', handleFormSubmit);
 
-    // 3. Determine initial view (no more URL checks)
-    navigateTo('list'); // Always start on the list view
+    // 3. Determine initial view (always navigate to list to load data)
+    navigateTo('list'); 
 });

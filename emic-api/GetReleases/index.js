@@ -19,13 +19,12 @@ module.exports = async function (context, req) {
     // 2. Build the SQL Query
     // Queries data filtering by the year prefix of the releaseDate
     const querySpec = {
-        query: `SELECT * FROM c WHERE STARTSWITH(c.releaseDate, @yearPrefix)`,
-        parameters: [
-            {
-                name: "@yearPrefix",
-                value: year 
-            }
-        ]
+    // We are filtering by year and ordering by releaseDate in DESCENDING order (latest first)
+    query: "SELECT * FROM c WHERE STARTSWITH(c.releaseDate, @year) ORDER BY c.releaseDate DESC",
+    parameters: [{
+        name: "@year",
+        value: year
+    }]
     };
 
     try {

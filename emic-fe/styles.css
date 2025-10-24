@@ -1,148 +1,139 @@
-/* Accessibility: Visually hides an element but keeps it readable for screen readers */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-}
-
-/* --- Global Styles --- */
+/* --- Global & Body Styles: Clean, Minimalist Foundation --- */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e9ebee; /* Light background */
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff; /* Pure white background */
+    color: #333333; /* Dark gray for main text */
+    margin: 0;
+    padding: 0; /* Remove body padding for edge-to-edge look */
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#siteHeader {
+    width: 100%;
+    text-align: center;
     padding: 20px 0;
-    margin: 0;
+    background-color: #001f40; /* Deep Navy Blue header background */
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#logoContainer {
+    padding: 5px 0;
+}
+
+#logoText {
+    font-size: 2.2em;
+    font-weight: 900;
+    color: #ffffff; /* White text for logo */
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: block;
 }
 
 h1 {
-    color: #1c1e21;
-    text-align: center;
+    color: #99ccff; /* Light blue accent for the subtitle */
+    margin: 5px 0 0 0;
+    font-size: 1.2em;
+    font-weight: 300;
 }
 
 hr {
-    border: 0;
-    height: 1px;
-    background-color: #ccc;
-    width: 100%;
-    max-width: 600px;
-    margin: 15px 0;
+    display: none; /* Removed the horizontal rule */
 }
 
-/* --- Container and Layout --- */
 #appContainer {
     width: 100%;
-    max-width: 600px;
-    margin-top: 10px;
+    max-width: 900px;
+    background-color: #f7f7f7; /* Slightly off-white content background */
+    border-radius: 4px;
+    padding: 30px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
 }
 
-#listView, #formView {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Hide views by default for JS control */
-.view-container {
-    display: none;
-}
+/* --- List View Styles --- */
 #listView {
-    /* Always visible on load before JS runs */
-    display: block; 
+    min-height: 400px; /* Ensure space even if no data */
 }
 
-
-/* --- List Header and Filter --- */
 #listHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #001f40;
     padding-bottom: 10px;
 }
 
-#year-selector {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1em;
+#year-controls {
+    /* Use flex for the wrapper to align the label and select */
+    display: flex; 
+    align-items: center;
+    /* This removes any gap between the label (if visible) and the select box */
+    gap: 5px; 
 }
 
-/* --- Twitter Feed Style List --- */
-#releasesList {
-    list-style: none;
-    padding: 0;
+#listHeader h2 {
+    color: #001f40;
+    font-size: 1.6em;
+    font-weight: 600;
     margin: 0;
 }
 
+#releasesList {
+    list-style: none;
+    padding: 0;
+}
+
 .release-item {
+    background-color: #ffffff;
+    border: 1px solid #dddddd; /* Very light gray border */
+    border-left: 5px solid #007bff; /* Primary accent color */
+    border-radius: 2px;
     padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
     margin-bottom: 15px;
-    background-color: #f7f7f7;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.release-item:hover {
+    background-color: #f0f8ff; /* Light blue tint on hover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .release-item strong {
     font-size: 1.2em;
-    color: #1877f2;
+    color: #001f40; /* Navy Blue title */
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
+    font-weight: 700;
 }
 
 .release-item p {
-    margin: 4px 0;
+    margin: 2px 0;
     font-size: 0.9em;
-    color: #606770;
+    color: #666666;
 }
 
-/* --- Form Styles --- */
-label {
+.release-item p:last-child {
     font-weight: 600;
-    display: block;
-    margin-top: 12px;
-    margin-bottom: 5px;
-    color: #1c1e21;
+    color: #333333;
 }
 
-input[type="text"], input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 1em;
-}
-
-button[type="submit"] {
-    background-color: #42b72a;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 20px;
-    width: 100%;
-    font-size: 1em;
-    font-weight: bold;
-}
-
-button[type="submit"]:hover {
-    background-color: #36a420;
-}
-
-#messageArea {
-    padding: 10px;
-    margin-top: 10px;
+/* --- Year Selector Styles --- */
+#year-selector {
+    padding: 8px 12px;
+    border: 1px solid #cccccc;
     border-radius: 4px;
-    font-weight: bold;
+    background-color: white;
+    font-size: 1em;
+    color: #333333;
+}
+
+/* --- Fallback/Error Styles --- */
+li {
     text-align: center;
+    color: gray;
+    padding: 10px;
 }
