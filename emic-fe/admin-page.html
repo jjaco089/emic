@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>EMIC Admin - Bulk Data Entry</title>
+    <link rel="stylesheet" href="admin-styles.css"> 
+</head>
+<body>
+
+    <header id="adminHeader">
+        <h1>EMIC Admin Portal</h1>
+        <p>Bulk Release Data Entry (Semicolon Separated)</p>
+    </header>
+    <hr>
+    
+    <div id="contentContainer">
+        
+        <div id="authStatus">
+            <p>Authentication Required. Click **Start Entry** to begin.</p>
+            <button id="startButton">Start Entry</button>
+        </div>
+
+        <div id="dataEntryContainer" style="display: none;">
+            <h2>Enter Releases (CSV Format)</h2>
+            <p class="format-hint">
+                Format: **Title;Director;Genre;Studio;YYYY-MM-DD** (One entry per line)
+            </p>
+            
+            <form id="bulkEntryForm">
+                <textarea id="csvInput" rows="15" placeholder="Paste your semicolon-separated data here..." required></textarea>
+
+                <button type="submit" id="submitButton">Submit All Entries</button>
+                <div id="messageArea"></div>
+            </form>
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="index.html">← Back to Main Release List</a>
+    </footer>
+
+    <script src="admin-app.js"></script>
+</body>
+</html>
