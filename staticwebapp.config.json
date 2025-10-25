@@ -5,6 +5,9 @@
     ]
   },
   "routes": [
-    
+    {
+      "route": "/api/*",
+      "allowedRoles": ["anonymous"]
+    }
   ]
 }
