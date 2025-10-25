@@ -1,6 +1,6 @@
 // Global variable to store authenticated credentials for the session
 let adminCredentials = null; 
-const API_URL = '/api/CreateRelease';
+const API_URL = 'https://lemon-smoke-07dda520f.3.azurestaticapps.net/api/CreateRelease';
 const REQUIRED_HEADERS = ['title', 'director', 'genre', 'studio', 'releaseDate'];
 
 // --- 1. Authentication Logic ---

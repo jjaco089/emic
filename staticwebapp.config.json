@@ -1,0 +1,10 @@
+{
+  "networking": {
+    "allowedOrigins": [
+      "https://jjaco089.github.io/emic" 
+    ]
+  },
+  "routes": [
+    
+  ]
+}

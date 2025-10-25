@@ -1,5 +1,5 @@
 // The base URL for your locally running Azure Functions API
-const API_BASE_URL = '/api/';
+const API_BASE_URL = 'https://lemon-smoke-07dda520f.3.azurestaticapps.net/api/';
 
 // --- Configuration ---
 const CURRENT_YEAR_CONTEXT = 2025; // Define the current year for project context
