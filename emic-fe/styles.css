@@ -63,16 +63,8 @@ hr {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 2px solid #001f40;
+    border-bottom: 2px solid #001f40; /* Sharp navy blue separator */
     padding-bottom: 10px;
-}
-
-#year-controls {
-    /* Use flex for the wrapper to align the label and select */
-    display: flex; 
-    align-items: center;
-    /* This removes any gap between the label (if visible) and the select box */
-    gap: 5px; 
 }
 
 #listHeader h2 {
@@ -81,6 +73,25 @@ hr {
     font-weight: 600;
     margin: 0;
 }
+
+#year-controls {
+    display: flex; 
+    align-items: center;
+    gap: 5px; 
+}
+
+/* --- NEW: Release Count Info Bar Style --- */
+#releaseCountInfo {
+    background-color: #e6f7ff; /* Very light blue background */
+    color: #0056b3; /* Darker blue text */
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-left: 5px solid #007bff; /* Primary accent color border */
+    font-weight: 700;
+    font-size: 1em;
+    border-radius: 2px;
+}
+/* ------------------------------------------ */
 
 #releasesList {
     list-style: none;

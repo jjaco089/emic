@@ -17,9 +17,8 @@ const views = {
 /**
  * Ensures the list view is always visible and refreshed.
  * NOTE: Since there is only one view, this mostly acts as a refresh trigger.
- * @param {string} viewName - 'list' (always defaults to list)
  */
-function navigateTo(viewName) {
+function navigateTo() {
     // Hide all (in case we add more later) and show the list view
     for (const key in views) {
         views[key].style.display = 'none';
@@ -70,9 +69,12 @@ function handleYearChange(event) {
  */
 async function fetchAndDisplayReleases(year) {
     const listContainer = document.getElementById('releasesList');
+    const countInfo = document.getElementById('releaseCountInfo'); // Get the new element
+
     listContainer.innerHTML = `<li style="text-align: center; color: gray;">Fetching data for ${year}...</li>`;
+    countInfo.textContent = `Loading data for ${year}...`; // Initial message for the count bar
     
-    const endpoint = `${API_BASE_URL}getreleases?year=${year}`; // Use updated endpoint without leading slash
+    const endpoint = `${API_BASE_URL}getreleases?year=${year}`;
 
     try {
         const response = await fetch(endpoint);
@@ -82,15 +84,26 @@ async function fetchAndDisplayReleases(year) {
         }
 
         const releases = await response.json();
-        listContainer.innerHTML = '';
         
         // Mock data filtering: Check if the release date is in the selected year
         const filteredReleases = releases.filter(movie => 
             movie.releaseDate && movie.releaseDate.substring(0, 4) === String(year)
         );
 
-        if (filteredReleases.length === 0) {
-             listContainer.innerHTML = `<li style="text-align: center; color: gray;">No releases found for ${year}.</li>`;
+        const releaseCount = filteredReleases.length;
+
+        // --- NEW COUNT LOGIC ---
+        if (releaseCount > 0) {
+            countInfo.textContent = `${releaseCount} releases found for ${year}.`;
+        } else {
+            countInfo.textContent = `No releases found for ${year}.`;
+        }
+        // -----------------------
+
+        listContainer.innerHTML = '';
+        
+        if (releaseCount === 0) {
+             // If no releases, the list remains empty, the count info is set above.
              return;
         }
 
@@ -108,24 +121,21 @@ async function fetchAndDisplayReleases(year) {
 
     } catch (error) {
         listContainer.innerHTML = `<li style="color:red; text-align: center;">Error: ${error.message}. Is the Azure Function Host running?</li>`;
+        countInfo.textContent = `Error loading releases.`;
         console.error('Fetch error:', error);
     }
 }
 
 
-// --- D. Form Submission Function (REMOVED) ---
-// The handleFormSubmit function has been removed entirely.
-
-
-// --- E. Initialization ---
+// --- D. Initialization ---
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Set up initial data and view state
     populateYearSelector();
     
-    // 2. Add event listeners (form submit listener removed)
+    // 2. Add event listeners
     document.getElementById('year-selector').addEventListener('change', handleYearChange);
 
     // 3. Determine initial view (always navigate to list to load data)
-    navigateTo('list'); 
+    navigateTo(); 
 });
